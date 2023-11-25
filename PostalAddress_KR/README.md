@@ -100,7 +100,7 @@ For more configuration info: https://solr.apache.org/guide/solr/latest/deploymen
 ```shell
 DIRECTORY_PATH/address.sh "./*.txt"
 ```
----------------
+----------------
 - drop all indexes
 ```text
 curl -X POST -H 'Content-Type: application/json' --data-binary '{"delete":{"query":"*:*" }}' http://localhost:8983/solr/address/update
