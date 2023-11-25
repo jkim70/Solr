@@ -1,6 +1,5 @@
 # Creating Solr Cloud Server with a classic schema mode (for a Korean Postal Address service)
 
-- Download Korean Postal Address Data from https://www.epost.go.kr/search/zipcode/areacdAddressDown.jsp
 - Download Apache Solr from https://solr.apache.org/downloads.html
 - Unzip the downloaded Solr and move to the home directory.
 - I am creating two Solr cloud instances on the following two directories:
@@ -11,12 +10,8 @@
 
 - Therefore, create necessary directories. (server/solr already exists)
 ```text
-mkdir server/solr/cloud
-mkdir server/solr/cloud/node1
-mkdir server/solr/cloud/node1/solr
-
-mkdir server/solr/cloud/node2
-mkdir server/solr/cloud/node2/solr
+mkdir -p server/solr/cloud/node1/solr
+mkdir -p server/solr/cloud/node2/solr
 ```
 - Open a bin/solr file and find this block of script
 ```text
@@ -84,7 +79,7 @@ as indicated, change to ```default="${update.autoCreateFields:false}```
 
 - Upload changed/updated config files to the zookeeper
 ```text
-bin/solr zk cp -r file:zk-config-down/conf zk:/configs/address -z 121.0.0.1:9983
+bin/solr zk cp -r file:zk-config-down/conf zk:/configs/address -z 127.0.0.1:9983
 ```
 
 - Restart solr servers
@@ -95,3 +90,22 @@ bin/solr restart -c -p 8984 -z localhost:9983 -s server/solr/cloud/node2/solr
 ```
 
 For more configuration info: https://solr.apache.org/guide/solr/latest/deployment-guide/solr-control-script-reference.html
+
+*********
+
+- Download Korean Postal Address Data from https://www.epost.go.kr/search/zipcode/areacdAddressDown.jsp
+- All files are downloaded to a directory ../solrData/addressDB
+- Downloaded txt files are "|" deliminated files, and the files contains ",".  Therefore, I wrote a shell script file to convert ", "(comma and space) to " " (space) and convert the "|" to a comma ",". This "./src/main/resources/util/address.sh' file also create CSV files from the txt files.
+- Run this command on a "../solrData/addressDB" directory
+```shell
+DIRECTORY_PATH/address.sh "./*.txt"
+```
+----------------
+- drop all indexes
+```text
+curl -X POST -H 'Content-Type: application/json' --data-binary '{"delete":{"query":"*:*" }}' http://localhost:8983/solr/address/update
+```
+- Post CSV file
+```text
+bin/solr post -url http://localhost:8983/solr/address/update -filetypes csv ../solrData/addressDB/
+```
