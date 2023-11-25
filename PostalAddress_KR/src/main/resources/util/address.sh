@@ -7,5 +7,4 @@ do
    sed 's/,/ /g' $TOKEN | sed 's/|/,/g' > $TOKEN.cpy
    cp $TOKEN.cpy $DO_NAME.csv
 done
-
 rm *.txt *.cpy
