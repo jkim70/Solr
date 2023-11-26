@@ -95,7 +95,7 @@ For more configuration info: https://solr.apache.org/guide/solr/latest/deploymen
 
 - Download Korean Postal Address Data from https://www.epost.go.kr/search/zipcode/areacdAddressDown.jsp
 - All files are downloaded to a directory ../solrData/addressDB
-- Downloaded txt files are "|" deliminated files, and the files contains ",".  Therefore, I wrote a shell script file to convert ", "(comma and space) to " " (space) and convert the "|" to a comma ",". This "./src/main/resources/util/address.sh' file also create CSV files from the txt files.
+- Downloaded txt files are "|" deliminated files, and the files contains ",".  Therefore, I wrote a shell script file to convert ", "(comma and space) to " " (space) and convert the "|" to a comma ",". This [script file](./src/main/resources/util/address.sh) also creates CSV files from the txt files.
 - Run this command on a "../solrData/addressDB" directory
 ```shell
 DIRECTORY_PATH/address.sh "./*.txt"
